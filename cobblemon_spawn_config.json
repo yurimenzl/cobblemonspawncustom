@@ -1,0 +1,38 @@
+{
+    "paradox": {
+        "iv_value": 31,
+        "iv_quantity": 5,
+        "shiny_chance": 1,
+        "ha_chance": 0.8,
+        "species_list": [
+            "snorunt"
+        ]
+    },
+    "legendary": {
+        "iv_value": 31,
+        "iv_quantity": 4,
+        "shiny_chance": 1,
+        "ha_chance": 0.8,
+        "species_list": [
+            "growlithe"
+        ]
+    },
+    "ultrabeasts": {
+        "iv_value": 31,
+        "iv_quantity": 3,
+        "shiny_chance": 1,
+        "ha_chance": 0.8,
+        "species_list": [
+            "geodude"
+        ]
+    },
+    "ditto": {
+        "iv_value": 31,
+        "iv_quantity": 2,
+        "shiny_chance": 1,
+        "ha_chance": 0.8,
+        "species_list": [
+            "ditto"
+        ]
+    }
+}

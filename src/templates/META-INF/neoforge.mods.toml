@@ -1,0 +1,33 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "MIT"
+
+[[mods]]
+modId = "cobblemonspawncustom"
+version = "0.0.1"
+displayName = "Cobblemon Spawn Custom"
+authors = "Yuri Celaschi"
+description = '''
+Mod para customizar os spawns dos Pokémon no Cobblemon.
+'''
+
+[[dependencies.cobblemonspawncustom]]
+    modId="neoforge"
+    type="required"
+    versionRange="${neo_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.cobblemonspawncustom]]
+    modId="minecraft"
+    type="required"
+    versionRange="[1.21.1]"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.cobblemonspawncustom]]
+    modId = "cobblemon"
+    mandatory = true
+    versionRange = "[1.6.1,)"
+    ordering = "AFTER"
+    side = "BOTH"

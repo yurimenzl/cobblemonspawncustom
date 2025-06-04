@@ -1,0 +1,38 @@
+{
+  "paradox": {
+    "iv_value": 31,
+    "iv_quantity": 3,
+    "shiny_chance": 0.20,
+    "ha_chance": 0.25,
+    "species_list": [
+      "ironvaliant"
+    ]
+  },
+  "legendary": {
+    "iv_value": 31,
+    "iv_quantity": 5,
+    "shiny_chance": 0.10,
+    "ha_chance": 0.15,
+    "species_list": [
+      "celebi"
+    ]
+  },
+  "ultrabeasts": {
+    "iv_value": 31,
+    "iv_quantity": 4,
+    "shiny_chance": 0.15,
+    "ha_chance": 0.20,
+    "species_list": [
+      "xurkitree"
+    ]
+  },
+  "ditto": {
+    "iv_value": 31,
+    "iv_quantity": 2,
+    "shiny_chance": 0.01,
+    "ha_chance": 0.01,
+    "species_list": [
+      "ditto"
+    ]
+  }
+}
