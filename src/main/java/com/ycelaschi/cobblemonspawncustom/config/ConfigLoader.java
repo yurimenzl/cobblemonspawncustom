@@ -7,6 +7,7 @@ import java.nio.file.*;
 import java.util.*;
 
 public class ConfigLoader {
+    private static boolean loaded = false;
     private static final Path CONFIG_PATH = Paths.get("config/cobblemon_spawn_config.json");
 
     private static final Map<String, SpeciesConfig> speciesConfigMap = new HashMap<>();
@@ -35,12 +36,17 @@ public class ConfigLoader {
 
                     speciesConfigMap.put(speciesName, new SpeciesConfig(ivValue, ivQuantity, shinyChance, haChance));
                 }
+                loaded = true;
             }
 
             System.out.println("[CobblemonSpawner] Configuração carregada com sucesso!");
         } catch (IOException e) {
             System.err.println("[CobblemonSpawner] Erro ao carregar configuração: " + e.getMessage());
         }
+    }
+
+    public static boolean isLoaded() {
+        return loaded;
     }
 
     public static SpeciesConfig getSpeciesConfig(String speciesName) {
