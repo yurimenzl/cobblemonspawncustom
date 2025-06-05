@@ -50,23 +50,23 @@ public class PokemonSpawnListener {
 
             for (Stats stat : selectedStats) {
                 originalPokemon.setIV(stat, ivValue);
-                LOGGER.info("[CobblemonSpawnCustom] Set {} IV {} for: {}", stat, ivValue, speciesName);
+                LOGGER.info("Set {} IV {} for: {}", stat, ivValue, speciesName);
             }
 
             for (Stats stat : remainingStats) {
                 int randomIv = new Random().nextInt(32);
                 originalPokemon.setIV(stat, randomIv);
-                LOGGER.info("[CobblemonSpawnCustom] Set {} IV {} for: {}", stat, randomIv, speciesName);
+                LOGGER.info("Set {} IV {} for: {}", stat, randomIv, speciesName);
             }
 
             if (new Random().nextDouble() < shinyChance) {
                 originalPokemon.setShiny(true);
-                LOGGER.info("[CobblemonSpawnCustom] Set Shiny for: {}", speciesName);
+                LOGGER.info("Set Shiny for: {}", speciesName);
             }
 
             if (new Random().nextDouble() < haChance) {
                 new HiddenAbilityProperty(true).apply(originalPokemon);
-                LOGGER.info("[CobblemonSpawnCustom] Set Hidden Ability for: {}", speciesName);
+                LOGGER.info("Set Hidden Ability for: {}", speciesName);
             }
 
             pokemonEntity.setPokemon(originalPokemon);
