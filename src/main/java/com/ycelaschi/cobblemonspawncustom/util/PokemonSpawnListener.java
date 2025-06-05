@@ -1,32 +1,75 @@
 package com.ycelaschi.cobblemonspawncustom.util;
 
-import com.cobblemon.mod.common.api.Priority;
-import com.cobblemon.mod.common.api.events.entity.SpawnEvent;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
-import com.cobblemon.mod.common.api.reactive.ObservableSubscription;
-import com.cobblemon.mod.common.api.events.CobblemonEvents;
+import com.ycelaschi.cobblemonspawncustom.config.ConfigLoader;
+import com.ycelaschi.cobblemonspawncustom.config.SpeciesConfig;
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.cobblemon.mod.common.pokemon.Pokemon;
+import com.cobblemon.mod.common.pokemon.properties.HiddenAbilityProperty;
+import com.cobblemon.mod.common.api.pokemon.stats.Stats;
+
+import java.util.*;
 
 public class PokemonSpawnListener {
 
-    /**
-     * Inscreve-se no evento de spawn de Pokémon com segurança de tipo.
-     *
-     * @param priority A prioridade do evento (ex: Priority.HIGH)
-     * @param handler  O que fazer quando o evento ocorrer
-     * @return Uma referência à inscrição, que pode ser usada para cancelá-la
-     */
-    public static ObservableSubscription<SpawnEvent<?>> onPokemonSpawn(
-            Priority priority,
-            Function1<PokemonEntity, Unit> handler
-    ) {
-        return CobblemonEvents.ENTITY_SPAWN.subscribe(priority, event -> {
-            if (event.getEntity() instanceof PokemonEntity pokemon) {
-                return handler.invoke(pokemon);
+    private static final Logger LOGGER = LoggerFactory.getLogger("CobblemonSpawnCustom");
+
+    @SubscribeEvent
+    public void onEntityJoinWorld(EntityJoinLevelEvent event) {
+        if (!(event.getEntity() instanceof PokemonEntity pokemonEntity)) return;
+
+        if (!ConfigLoader.isLoaded()) {
+            LOGGER.warn("Config ainda não carregada quando Pokémon spawnou.");
+            return;
+        }
+
+        Pokemon originalPokemon = pokemonEntity.getPokemon();
+        String speciesName = originalPokemon.getSpecies().getName().toLowerCase();
+        SpeciesConfig config = ConfigLoader.getSpeciesConfig(speciesName);
+
+        if (config != null) {
+            int ivValue = config.ivValue;
+            int ivQuantity = config.ivQuantity;
+            double shinyChance = config.shinyChance;
+            double haChance = config.haChance;
+
+            List<Stats> allStats = Arrays.asList(
+                    Stats.HP, Stats.ATTACK, Stats.DEFENCE,
+                    Stats.SPECIAL_ATTACK, Stats.SPECIAL_DEFENCE, Stats.SPEED
+            );
+
+            Collections.shuffle(allStats);
+            List<Stats> selectedStats = allStats.subList(0, ivQuantity);
+            List<Stats> remainingStats = allStats.subList(ivQuantity, allStats.size());
+
+            for (Stats stat : selectedStats) {
+                originalPokemon.setIV(stat, ivValue);
+                LOGGER.info("Set {} IV {} for: {}", stat, ivValue, speciesName);
             }
-            return Unit.INSTANCE;
-        });
+
+            for (Stats stat : remainingStats) {
+                int randomIv = new Random().nextInt(32);
+                originalPokemon.setIV(stat, randomIv);
+                LOGGER.info("Set {} IV {} for: {}", stat, randomIv, speciesName);
+            }
+
+            if (new Random().nextDouble() < shinyChance) {
+                originalPokemon.setShiny(true);
+                LOGGER.info("Set Shiny for: {}", speciesName);
+            }
+
+            if (new Random().nextDouble() < haChance) {
+                new HiddenAbilityProperty(true).apply(originalPokemon);
+                LOGGER.info("Set Hidden Ability for: {}", speciesName);
+            }
+
+            pokemonEntity.setPokemon(originalPokemon);
+        }
     }
 }
