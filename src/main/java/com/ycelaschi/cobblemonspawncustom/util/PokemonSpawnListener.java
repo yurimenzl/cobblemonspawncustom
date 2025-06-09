@@ -25,7 +25,7 @@ public class PokemonSpawnListener {
         if (!(event.getEntity() instanceof PokemonEntity pokemonEntity)) return;
 
         if (!ConfigLoader.isLoaded()) {
-            LOGGER.warn("Config ainda não carregada quando Pokémon spawnou.");
+            LOGGER.warn("Config files still loading.");
             return;
         }
 
@@ -33,7 +33,7 @@ public class PokemonSpawnListener {
         String speciesName = originalPokemon.getSpecies().getName().toLowerCase();
         SpeciesConfig config = ConfigLoader.getSpeciesConfig(speciesName);
 
-        if (config != null) {
+        if (config != null && !originalPokemon.isPlayerOwned()) {
             int ivValue = config.ivValue;
             int ivQuantity = config.ivQuantity;
             double shinyChance = config.shinyChance;
@@ -50,23 +50,23 @@ public class PokemonSpawnListener {
 
             for (Stats stat : selectedStats) {
                 originalPokemon.setIV(stat, ivValue);
-                LOGGER.info("Set {} IV {} for: {}", stat, ivValue, speciesName);
+                LOGGER.info("Set {} IV {} for {}", stat, ivValue, speciesName);
             }
 
             for (Stats stat : remainingStats) {
                 int randomIv = new Random().nextInt(32);
                 originalPokemon.setIV(stat, randomIv);
-                LOGGER.info("Set {} IV {} for: {}", stat, randomIv, speciesName);
+                LOGGER.info("Set {} IV {} for {}", stat, randomIv, speciesName);
             }
 
             if (new Random().nextDouble() < shinyChance) {
                 originalPokemon.setShiny(true);
-                LOGGER.info("Set Shiny for: {}", speciesName);
+                LOGGER.info("Set Shiny for {}", speciesName);
             }
 
             if (new Random().nextDouble() < haChance) {
                 new HiddenAbilityProperty(true).apply(originalPokemon);
-                LOGGER.info("Set Hidden Ability for: {}", speciesName);
+                LOGGER.info("Set Hidden Ability for {}", speciesName);
             }
 
             pokemonEntity.setPokemon(originalPokemon);
