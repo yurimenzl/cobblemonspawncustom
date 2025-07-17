@@ -10,6 +10,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import org.slf4j.Logger;
 
 @Mod(CobblemonSpawnCustom.MOD_ID)
@@ -19,6 +20,14 @@ public class CobblemonSpawnCustom {
 
     public CobblemonSpawnCustom(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
+
+        NeoForge.EVENT_BUS.register(this);
+    }
+
+    @net.neoforged.bus.api.SubscribeEvent
+    private void registerCommands(RegisterCommandsEvent event) {
+        SetAbilityCommand.register(event.getDispatcher());
+        // Você pode registrar outros comandos aqui também
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
